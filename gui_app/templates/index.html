@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Diko 📚✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #f0f0f0;
+            margin: 0;
+            padding: 2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        form {
+            display: flex;
+            gap: 0.5em;
+            margin-bottom: 1em;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 0.75em 1em;
+            border: none;
+            border-radius: 30px;
+            font-size: 1em;
+            outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 0 8px 2px #ffd700;
+            background-color: #fff;
+            color: #333;
+        }
+
+        button {
+            background: #ffd700;
+            border: none;
+            border-radius: 30px;
+            padding: 0 1.5em;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            color: #333;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background: #ffbf00;
+            transform: scale(1.05);
+        }
+
+        .message {
+            margin-top: 1em;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+        }
+
+        .definition {
+            margin-top: 1em;
+            font-size: 1.3em;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1em 1.5em;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .suggestions {
+            margin-top: 1em;
+            color: #ffd700;
+            font-weight: 600;
+            text-align: center;
+            max-width: 600px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-weight: 700; font-size: 2.5rem; color: #ffd700;">Diko</span>
+        <span>📚✨</span>
+    </h1>
+    <form method="post" autocomplete="off">
+        <input type="text" name="word" placeholder="Enter word to search 🔍" value="{{ query }}" required />
+        <button type="submit">Search 🔎</button>
+    </form>
+    {% if message %}
+    <div class="message">{{ message }}</div>
+    {% endif %}
+    {% if definition %}
+    <div class="definition">
+        <h2>📖 Definition for "{{ definition.word }}"</h2>
+    {% if definition.phonetics %}
+        <p><strong>Pronunciation:</strong>
+        {# Show only the first phonetic with audio #}
+        {% set phon = definition.phonetics[0] %}
+        {{ phon.text }}
+        {% if phon.audio %}
+            <audio controls style="vertical-align: middle;">
+                <source src="{{ phon.audio }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        {% endif %}
+        </p>
+    {% endif %}
+        {% for meaning in definition.meanings %}
+            <h3>{{ meaning.partOfSpeech }}</h3>
+            <ul>
+                {% for d in meaning.definitions %}
+                    <li>
+                        {{ d.definition }}
+                        {% if d.example %}
+                            <br><em>Example: "{{ d.example }}"</em>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        {% if definition.error %}
+            <p style="color: red;">{{ definition.error }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if suggestions %}
+    <div class="suggestions">💡 Suggestions: {{ suggestions | join(', ') }}</div>
+    {% endif %}
+    {% if search_history %}
+    <button id="history-button" onclick="toggleHistory()">🕘 History</button>
+    <div id="search-history" style="display:none; margin-top: 1em; max-width: 600px; background: rgba(255, 255, 255, 0.15); padding: 1em 1.5em; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); color: #f0f0f0;">
+        <h3>🕘 Search History</h3>
+        <ul>
+            {% for word in search_history %}
+                <li>{{ word }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        function toggleHistory() {
+            const historyDiv = document.getElementById('search-history');
+            if (historyDiv.style.display === 'none' || historyDiv.style.display === '') {
+                historyDiv.style.display = 'block';
+            } else {
+                historyDiv.style.display = 'none';
+            }
+        }
+    </script>
+    {% endif %}
+</body>
+</html>
