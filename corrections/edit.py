@@ -4,6 +4,8 @@ def edit_distance(word1, word2):
     """
     Yeh function do words ke beech edit distance calculate karta hai.
     """
+    if not word1 or not word2:
+        return max(len(word1) if word1 else 0, len(word2) if word2 else 0)
     m, n = len(word1), len(word2)
     dp = [[0] * (n+1) for _ in range(m+1)]
 
@@ -29,6 +31,12 @@ def get_closest_words(query, word_list, top_n=3):
     Yeh function query ke sabse kareeb words return karta hai
     edit distance ke basis par.
     """
-    distances = [(word, edit_distance(query.lower(), word.lower())) for word in word_list]
+    distances = []
+    for word in word_list:
+        try:
+            dist = edit_distance(query.lower(), word.lower())
+            distances.append((word, dist))
+        except Exception:
+            continue
     distances.sort(key=lambda x: x[1])
     return [word for word, dist in distances[:top_n]]
