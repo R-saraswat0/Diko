@@ -12,7 +12,7 @@ Diko is an interactive dictionary web application that allows users to search fo
 - Audio pronunciation playback.
 ##Some screenshots
 <img width="1890" height="892" alt="Image" src="https://github.com/user-attachments/assets/049c4340-e0d2-4bac-94a4-253393122f86" />
-
+<img width="1190" height="912" alt="Image" src="https://github.com/user-attachments/assets/e965d783-fb5e-4db8-953e-369b06e854d4" />
 ## Installation
 
 1. Clone the repository:
