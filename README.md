@@ -10,6 +10,8 @@ Diko is an interactive dictionary web application that allows users to search fo
 - Interactive web UI built with Flask.
 - Search history with toggle visibility.
 - Audio pronunciation playback.
+##Some screenshots
+<img width="1890" height="892" alt="Image" src="https://github.com/user-attachments/assets/049c4340-e0d2-4bac-94a4-253393122f86" />
 
 ## Installation
 
